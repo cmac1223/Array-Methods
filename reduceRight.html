@@ -27,8 +27,8 @@
 
       // array is empty
       if (Object.keys(array).length === 0) {
-       
-          throw new TypeError(' undefined is not a function')
+
+        throw new TypeError(' undefined is not a function')
       }
 
       // Excluding holes at the beginning of the array.
@@ -179,7 +179,6 @@
       eq(1, returnedValue)
     },
     'If no initialValue, array is empty, TypeError would be thrown.': function () {
-      debugger;
       var isTypeError = false;
       try {
         [].reduceRight(function () { });
@@ -187,6 +186,13 @@
         var isTypeError = (e instanceof TypeError);
       }
       eq(isTypeError, true)
+    },
+    'It should not mutate original array': function () {
+      debugger;
+      var array = [, , , , 1, , , ,];
+      var returnedValue = reduceRight(array, function (accumulator, currentValue, index) {
+      })
+      eq(false, array === returnedValue)
     }
 
   })
