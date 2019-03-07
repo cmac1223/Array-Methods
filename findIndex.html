@@ -1,0 +1,148 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  // Native function
+  // arr.findIndex(callback(element[ ,index[, array]])[, thisArg]);
+
+  // Our function
+  // findIndex(arr, callback(element[, index[, array]][, thisArg]));
+
+
+  // Callback Parameters
+  // element (value of the element)
+  // index (index of the element)
+  // array (the array object being traversed)
+
+  // Return value
+  // An index in the array if an element passes the test; otherwise, -1.
+
+  // It should executes the callback function once for every array index 0..length-1.
+  // It should return the return the index of the element whose value is truthy according to the callback function.
+  // It should pass in the ith element into the callback as the first argument.
+  // It should pass in the ith index into the callback as the second argument.
+  // It should pass in the original array into the callback as the third argument.
+  // It should pass in an optional this argument.
+  // It should return -1 if callback never returns a truthy value.
+  // It should return -1 if array.length === 0
+
+  function findIndex(originalArray, callback, optionalThis) {
+    var startingIndex = 0
+    var findIndexCallback = callback;
+    var arrayIndexes = Object.keys(originalArray);
+
+    // optional this argument.
+    if (optionalThis) {
+      findIndexCallback = callback.bind(optionalThis);
+    }
+
+    // Skip holes in array
+    while (startingIndex in originalArray === false && startingIndex < originalArray.length) {
+      startingIndex++;
+    }
+
+    // array elements equal 0
+    if (arrayIndexes.length === 0) {
+      return '-1'
+    }
+
+    var findIndexArray = [];
+    for (var i = startingIndex; i < originalArray.length; i++) {
+      if (findIndexCallback(originalArray[i], i, originalArray)) {
+        findIndexArray.push(i)
+        return findIndexArray[0];
+      }
+    }
+    return -1
+  }
+
+
+  tests({
+
+    'It should run the callback array.length times.': function () {
+      var numberOfTimesCallbackHasRun = 0;
+      findIndex([1, 2, 3], function () {
+        numberOfTimesCallbackHasRun++;
+      })
+      eq(numberOfTimesCallbackHasRun, 3)
+    },
+    'It should pass in the ith element into the callback as the first argument.': function () {
+      var passArgumentIntoTheCallbackCounter = 0;
+      var array = [1];
+      findIndex(array, function (element) {
+        if (element === 1) {
+          passArgumentIntoTheCallbackCounter++;
+        }
+      })
+      eq(passArgumentIntoTheCallbackCounter, 1);
+    },
+
+    // This is the original way of testing for the ith element
+    'It should pass in the ith element into the callback as the first argument.': function () {
+      // findIndex([1], function (element) {
+      //   eq(element, 1)
+      // })
+    },
+    'It should pass in the ith position into the callback as the second argument.': function () {
+      var passArgumentIntoTheCallbackCounter = 0;
+      var array = [1];
+      findIndex(array, function (element, index) {
+        if (index === 0) {
+          passArgumentIntoTheCallbackCounter++;
+        }
+      })
+      eq(passArgumentIntoTheCallbackCounter, 1);
+    },
+    'It should pass in the original array into the callback as the third argument.': function () {
+      var passArgumentIntoTheCallbackCounter = 0;
+      var array = [1, 2, 3];
+      findIndex(array, function (element, index, originalArray) {
+        if (originalArray === array) {
+          passArgumentIntoTheCallbackCounter++;
+        }
+      })
+      eq(passArgumentIntoTheCallbackCounter, 3)
+    },
+    'It should accept an optional this argument into the find function.': function () {
+      var optionalThisArgumentCounter = 0;
+      findIndex([1], function (element, index) {
+        if (this.name === 'Christopher') {
+          optionalThisArgumentCounter++
+        }
+      }, { name: 'Christopher' })
+      seq(optionalThisArgumentCounter, 1)
+    },
+    'It should immediately return the first index where the callback value is true.': function () {
+      var findIndexArray = findIndex([1, 2], function (element, index) {
+        return element > 1;
+      })
+      eq(findIndexArray, 1)
+    },
+    'It should return -1, all elements in array.length have a value of false.': function () {
+      var findArray = findIndex([2, 3], function (element) {
+        return element < 2;
+      })
+      eq(findArray, -1)
+    },
+    'It should return -1, if array.length equals 0': function () {
+      var findArray = findIndex([], function () {
+
+      })
+      eq(findArray, -1)
+    },
+    'It should skip holes in array.': function () {
+      var findIndexArray = findIndex([, , , , 1, , , , , , 2], function (element) {
+        return element < 2;
+      })
+      eq(findIndexArray, 4)
+    },
+    'It should not mutate the original array.': function () {
+      var originalArray = [2, 3]
+      var findIndexArray = findIndex(originalArray, function (element) {
+        return element < 2;
+      })
+      eq(findIndexArray !== originalArray, true)
+    }
+  })
+
+</script>

@@ -1,0 +1,120 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  // native func
+  // arr.every(callback[, thisArg]);
+
+  // our func
+  // every(arr, callback[, thisArg]);
+
+  // callback parameters
+  // element
+  // index
+  // array
+
+  // Return value
+  // true if the callback function returns a truthy value for every array element; otherwise, false.
+
+
+  function every(array, callback, optionalThis) {
+    var everyCallback = callback;
+    if (optionalThis) {
+      everyCallback = callback.bind(optionalThis)
+    }
+    var everyArray = [];
+    for (var i = 0; i < array.length; i++) {
+      array[i] = everyCallback(array[i], i, array);
+      if (array[i] === false) {
+        return false
+      } else if (array[i] === true) {
+        everyArray.push(array[i]);
+        // return true;
+      }
+    }
+    return true;
+  }
+
+
+  tests({
+    'It should run callback array.length times.': function () {
+      var numberOfTimesCallback = 0;
+      every([1, 2, 3], function () {
+        numberOfTimesCallback++;
+      })
+      eq(numberOfTimesCallback, 3)
+    },
+    'It should pass in the element as the first parameter into the callback.': function () {
+      var numberOfTimesCallback = 0;
+      every([1], function (blah) {
+        if (blah === 1) {
+          numberOfTimesCallback++;
+        }
+      })
+      eq(numberOfTimesCallback, 1)
+    },
+    'It should pass in the index as the second parameter into the callback.': function () {
+      var numberOfTimesCallback = 0;
+      every([1], function (element, index) {
+        if (index === 0) {
+          numberOfTimesCallback++;
+        }
+      })
+      eq(numberOfTimesCallback, 1)
+    },
+    'It should pass in the original array as the third parameter into the callback.': function () {
+      var numberOfTimesCallback = 0;
+      var originalArray = [1, 2, 3];
+      every(originalArray, function (element, index, array) {
+        if (originalArray === array) {
+          numberOfTimesCallback++;
+        }
+      })
+      eq(numberOfTimesCallback, 3)
+    },
+    'It should have an optional this argument.': function () {
+      every([1], function () {
+        eq(this.name, 'Christopher')
+      }, { name: 'Christopher' })
+    },
+    'It should executes provided callback once for each element present in the array.': function () {
+      // debugger;
+      var numberOfTimesCallback = 0;
+      var array = [1, 2, 3];
+      var everyArray = every(array, function (element) {
+        if (element > 1) {
+          numberOfTimesCallback++
+        }
+        return element > 1;
+      })
+      eq(numberOfTimesCallback, 0)
+      // eq(everyArray.length, 2)
+
+    },
+    'It should immediately return false, for the first element whose value is falsy provided by the callback.': function () {
+      // debugger;
+      var array = [2, 3, 4];
+      var everyArray = every(array, function (element) {
+        return element > 3;
+      })
+      eq(everyArray, false)
+
+    },
+    'It should return true, if all the elements in the array returns truthy provided by the callback.': function () {
+      // debugger;
+      var array = [2, 3, 4];
+      var everyArray = every(array, function (element) {
+        return element > 1;
+      })
+      eq(everyArray, true)
+    },
+    'It should not mutate the original array.': function () {
+      var array = [2, 3, 4];
+      var everyArray = every(array, function (element) {
+        return element * 2;
+      })
+      eq(everyArray === array, false)
+    }
+
+  })
+</script>

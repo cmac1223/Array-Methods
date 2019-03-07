@@ -1,0 +1,117 @@
+<script src="../tinytest.js"></script>
+<script>
+
+  // Example 1: 
+  // It should run the callback array.length times. 
+  // map([1, 2, 3], function(){
+  //   console.log('hi');
+  // })
+
+  // Example 2:
+  // It should pass in the ith element into the callback as the first argument.
+  //   map([1, 2, 3], function (currentValue) {
+  //     console.log(currentValue);
+  //   })
+
+  // Example 3:
+  // It should pass in the index into the callback as the second argument.
+  //   map([1, 2, 3], function (currentValue, index) {
+  //     console.log(index)
+  //   })
+
+  // Example 4:
+  // It should pass in the array into the callback as the third argument.
+  //   map([1, 2, 3], function (currentValue, index, array) {
+  //     console.log(array)
+  //   })
+
+  // Example 5:
+  // It should pass in an optional this object into the function which is accesible to the callback.
+  //   map([1, 2, 3], function () {
+  //     this.name
+  //   }, { name: 'Christopher' })
+
+  // Example 6:
+  // It should constructs a new array from the results.
+  // var originalArray = [];
+  // var mappedArray = map(originalArray, function () { });
+  // originalArray !== mappedArray
+
+  // Example 7:
+  // It should call a provided callback function once for each element in an array.
+  //  var mappedArray = map([1, 2, 3], function dobule(currentValue) {
+  //     return currentValue * 2;
+  //   })
+  //   Expect [2, 4, 6]
+
+  function map(originalArray, callback, optionalThisObject) {
+    var mapCallback = callback;
+
+    if (optionalThisObject) {
+      mapCallback = callback.bind(optionalThisObject);
+    }
+
+    var mappedArray = [];
+    for (var i = 0; i < originalArray.length; i++) {
+      if (i in originalArray) {
+        mappedArray[i] = mapCallback(originalArray[i], i, originalArray);
+
+      }
+    }
+    return mappedArray;
+  }
+
+  tests({
+
+    'It should run the callback array.length times. ': function () {
+      var numberOfTimesCallbackHasRun = 0;
+      map([1, 2, 3], function () {
+        numberOfTimesCallbackHasRun++;
+      })
+      eq(numberOfTimesCallbackHasRun, 3)
+    },
+    'It should pass in the ith element into the callback as the first argument.': function () {
+      map([1], function (currentValue) {
+        eq(currentValue, 1)
+      })
+    },
+    'It should pass in the index into the callback as the second argument.': function () {
+      map([1], function (currentValue, index) {
+        eq(index, 0)
+      })
+    },
+    'It should pass in the array into the callback as the third argument.': function () {
+      var originalArray = [1, 2, 3];
+      map(originalArray, function (currentValue, index, array) {
+        eq(originalArray, array)
+      })
+    },
+    'It should pass in an optional this object into the function which is accesible to the callback.': function () {
+      map([1], function () {
+        eq(this.name, 'Christopher')
+      }, { name: 'Christopher' })
+    },
+    'It should constructs a new array from the results.': function () {
+      var originalArray = [];
+      var mappedArray = map(originalArray, function () { });
+      eq(mappedArray !== originalArray, true)
+      eq(Array.isArray(mappedArray), true)
+    },
+    'It should call a provided callback function once for each element in an array.': function () {
+      var mappedArray = map([1], function double(currentValue) {
+        return currentValue * 2;
+      })
+      eq(mappedArray[0], 2)
+    },
+    'It should skipped over missing elements of the array': function () {
+      var mappedArray = map([, 4], function double(currentValue) {
+        return currentValue * 2
+      })
+      eq(mappedArray[1], 8);
+      eq(mappedArray.length, 2);
+      eq(0 in mappedArray, false);
+    }
+
+
+  })
+</script>

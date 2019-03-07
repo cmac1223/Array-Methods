@@ -1,0 +1,25 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  function reduce(array, callback, initialValue) {
+    var resultSoFar = initialValue;
+    for (var i = 0; i < array.length; i++) {
+      resultSoFar = callback(resultSoFar, array[i], i, array)
+    }
+    return resultSoFar;
+  }
+
+
+  tests({
+
+    'testing so see if reduce actually reduces.': function () {
+      debugger;
+      var reduceArray = reduce([1, 2, 3, 4, 5], function (a, b) {
+        return a + b;
+      }, 0)
+      eq(reduceArray, 15)
+    }
+  })
+
+</script>

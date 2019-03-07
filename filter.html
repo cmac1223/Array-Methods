@@ -1,0 +1,110 @@
+<script src="../tinytest.js"></script>
+<script>
+
+  // Example 1: 
+  // It should run the callback array.length times.
+  // filter([1, 2, 3], function(){})
+
+  // Example 2: 
+  // It should pass in the ith element into the callback. 
+  // filter([1, 2, 3], function(element){
+  //   console.log(number);
+  // })
+
+  // Example 3: 
+  // It should pass in the ith position as the second argument into the callback. 
+  // filter([1, 2, 3], function(element, index){
+  //   console.log(index);
+  // })
+
+  // Example 4: 
+  // It should pass in the original array as the third argument into the callback. 
+  // filter([1, 2, 3], function(element, index, array){
+  //   console.log(array);
+  // })
+
+  // Example 5: 
+  // It should use an optional this object. 
+  // filter([], function(){
+  //   this.name
+  // }, {name: 'Christopher'})
+
+  // Example 6: 
+  // It should not mutate the array on which it is called. 
+  // var originalArray = [];
+  // var filterArray = filter(originalArray, function(){});
+  // originalArray !== filterArray;
+
+  // Example 7: 
+  // It should make sure new filter array is an array. 
+  // var filterArray = filter(originalArray, function(){});
+  // Array.isArray(filterArray) === true
+
+  // Example 8. 
+  // It should pass in the new array, only the elements whose value are truthy. 
+  // filter([1, 2, 3], function(element){
+  //   return element > 1;
+  // })
+
+  function filter(originalArray, callback, optionalThisObject) {
+    var filterCallback = callback;
+
+    if (optionalThisObject) {
+      var filterCallback = filterCallback.bind(optionalThisObject);
+    }
+    var filterArray = []
+    for (var i = 0; i < originalArray.length; i++) {
+      if (filterCallback(originalArray[i], i, originalArray)) {
+        filterArray.push(originalArray[i]);
+      }
+    }
+    return filterArray;
+  }
+
+  tests({
+    'It should run the callback array.length times.': function () {
+      var numberOfTimesCallbackHasRun = 0;
+      filter([1, 2, 3], function () {
+        numberOfTimesCallbackHasRun++;
+      })
+      eq(numberOfTimesCallbackHasRun, 3);
+    },
+    'It should pass in the ith element into the callback. ': function () {
+      filter([1], function (element) {
+        eq(element, 1)
+      })
+    },
+    'It should pass in the ith position as the second argument into the callback. ': function () {
+      filter([1], function (element, index) {
+        eq(index, 0)
+      })
+    },
+    'It should pass in the original array as the third argument into the callback. ': function () {
+      var originalArray = [1, 2, 3];
+      filter(originalArray, function (element, index, array) {
+        eq(originalArray, array)
+      })
+    },
+    'It should use an optional this object. ': function () {
+      filter([], function () {
+        eq(this.name, 'Christopher')
+      }, { name: 'Christopher' })
+    },
+    'It should not mutate the array on which it is called. ': function () {
+      var originalArray = [];
+      var filterArray = filter(originalArray, function () { });
+      eq(originalArray !== filterArray, true);
+    },
+    'It should make sure new filter array is an array. ': function () {
+      var filterArray = filter([], function () { });
+      eq(Array.isArray(filterArray), true)
+    },
+    'It should pass in the new array, only the elements whose value are truthy. ': function () {
+      var filterArray = filter([1, 2, 3], function (element) {
+        return element > 1;
+      })
+      eq(filterArray.length, 2);
+      eq(filterArray[0], 2);
+    }
+  })
+</script>

@@ -1,0 +1,102 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  // native func
+  // arr.some(callback[, thisArg]);
+
+  // our func
+  // some(arr, callback[, thisArg]);
+
+  // callback parameters
+  // element
+  // index
+  // array
+
+  // Return value
+  // true if the callback function returns a truthy value for at least one element in array; otherwise, false.
+
+
+  function some(array, callback, optionalThis) {
+    var someCallback = callback;
+
+    if (optionalThis) {
+      someCallback = callback.bind(optionalThis);
+    }
+
+    var someArray = [];
+    for (var i = 0; i < array.length; i++) {
+      array[i] = someCallback(array[i], i, array);
+      if (array[i] === true) {
+        someArray.push(array[i]);
+        return true
+      } else if (array[i] === false) {
+        someArray.push(array[i]);
+      }
+    }
+    return false;
+  }
+
+
+  tests({
+    'It should run callback array.length times.': function () {
+      var numberOfTimesCallbackHasRun = 0;
+      some([1, 2, 3], function () {
+        numberOfTimesCallbackHasRun++;
+      })
+      eq(numberOfTimesCallbackHasRun, 3)
+    },
+    'It should pass in the element as the first parameter into the callback.': function () {
+      some([1], function (element) {
+        eq(element, 1)
+      })
+    },
+    'It should pass in the index as the second parameter into the callback.': function () {
+      some([1], function (element, index) {
+        eq(index, 0)
+      })
+    },
+    'It should pass in the original array as the third parameter into the callback.': function () {
+      var originalArray = [1];
+      some(originalArray, function (element, index, array) {
+        eq(array, originalArray)
+      })
+    },
+    'It should have an optional this argument.': function () {
+      some([1], function () {
+        eq(this.name, 'Chris')
+      }, { name: 'Chris' })
+    },
+    'It should executes provided callback once for each element present in the array.': function () {
+      // debugger;
+      var numberOfTimesCallbackHasRun = 0;
+      some([1, 2, 3], function (element) {
+        if (element > 0) {
+          numberOfTimesCallbackHasRun++;
+        }
+      })
+      eq(numberOfTimesCallbackHasRun, 3)
+    },
+    'It should immediately return true, for the first element whose value is truthy provided by the callback.': function () {
+      var someArray = some([1, 2, 3, 4, 5,], function (element) {
+        return element > 0;
+      })
+      eq(someArray, true)
+    },
+    'It should return false, if all the elements in the array returns false provided by the callback.': function () {
+      var someArray = some([1, 2], function (element) {
+        return element > 2;
+      })
+      eq(someArray, false)
+    },
+    'It should not mutate the original array.': function () {
+      debugger;
+      var originalArray = [1, 2]
+      var someArray = some(originalArray, function (element) {
+        return element > 0;
+      })
+      eq(someArray === originalArray, false)
+    } 
+
+  })
+</script>
