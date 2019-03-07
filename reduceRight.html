@@ -188,7 +188,6 @@
       eq(isTypeError, true)
     },
     'It should not mutate original array': function () {
-      debugger;
       var array = [, , , , 1, , , ,];
       var returnedValue = reduceRight(array, function (accumulator, currentValue, index) {
       })
