@@ -35,6 +35,10 @@
 
   function concat(arry) {
     var newArray = [];
+    // check to see if arguments is true
+    if (arguments[0].length === undefined) {
+      throw new TypeError(arguments[0].concat + ' is not a function')
+    }
     if (arguments.length > 0) {
       for (let i of arguments) {
         var array = Array.from(i)
@@ -124,6 +128,17 @@
       var newArray = concat(arry1, arry2)
       eq(newArray === arry1, false)
       eq(arry1[0], 1)
+    },
+    'It should return undefined if arguments[0] === undefined ': function () {
+      var arry1 = {};
+      var arry2 = [3, 4];
+      var isTypeError = false;
+      try {
+        arry1.concat(arry2);
+      } catch (e) {
+        var isTypeError = (e instanceof TypeError);
+      }
+      eq(isTypeError, true)
     }
   })
 
