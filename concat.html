@@ -1,0 +1,130 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  // native syntax
+  // var new_array = old_array.concat([value1[, value2[, ...[, valueN]]]]);
+
+  // our syntax
+  // concat(old_array, [value1[, value2[, ...[, valueN]]]]);
+
+  // The concat() method is used to merge two or more arrays. This method does not change the existing arrays, but instead returns a new array.
+
+  // Parameters
+  // valueN (Optional)
+
+  // Return value
+  // A new Array instance.
+
+
+  // Prototype implementation.
+
+  // function concat() {
+  //   var newArray = [];
+  //   if (arguments.length > 0) {
+  //     for (let i of arguments) {
+  //       var array = Array.from(i)
+  //       for (var j = 0; j < array.length; j++) {
+  //         newArray.push(array[j])
+  //       }
+  //     }
+
+  //   }
+  //   return newArray;
+  // }
+
+  function concat(arry) {
+    var newArray = [];
+    if (arguments.length > 0) {
+      for (let i of arguments) {
+        var array = Array.from(i)
+        for (var j = 0; j < array.length; j++) {
+          newArray.push(array[j])
+        }
+      }
+    } else {
+      return arry
+    }
+    return newArray;
+  }
+
+
+  tests({
+    'It should pass in an valueN(array).': function () {
+      var array = [1];
+      var valueN = concat(array)
+      eq(valueN[0], 1)
+    },
+    'It should have the ability to pass in multiple arrays. ': function () {
+      var arry1 = [1];
+      var arry2 = [2];
+      var passInArrays = concat(arry1, arry2)
+      eq(passInArrays[0], 1);
+      eq(passInArrays[1], 2);
+    },
+    'It should create a new array consisting of the elements in the object on which it is called.': function () {
+      var array = [1, 2]
+      var newArray = concat(array)
+      eq(newArray[0], array[0])
+      eq(newArray[1], array[1])
+    },
+    'It should return array followed in order by, for each argument, the elements of that argument or the argument itself.': function () {
+      var arry1 = [1, 2];
+      var arry2 = [3];
+      var concatArray = concat(arry1, arry2);
+      eq(concatArray[0], arry1[0]);
+      eq(concatArray[1], arry1[1]);
+      eq(concatArray[2], arry2[0]);
+    },
+    'It should not recurse into nested array arguments.': function () {
+      var arry1 = [1, 2];
+      var arry2 = [3];
+      var concatArray = concat(arry1, arry2);
+      eq(concatArray[0] === arry1[0], true);
+      eq(concatArray[1] === arry2[0], false);
+      eq(concatArray[2] === arry1[1], false);
+    },
+    'It should return a shallow copy that contains copies of the same elements combined from the original arrays.': function () {
+      var array = [1, 2]
+      var newArray = concat(array)
+      eq(newArray[0], array[0])
+      eq(newArray[1], array[1])
+    },
+    'It should copy elements of the original arrays into the new array as follows.': function () {
+      var array = [1, 2]
+      var newArray = concat(array)
+      eq(newArray[0], array[0])
+      eq(newArray[1], array[1])
+    },
+    'Both the original and new array refer to the same object.': function () {
+      var array = [1, 2]
+      var newArray = concat(array)
+      eq(newArray[0], array[0])
+      eq(newArray[1], array[1])
+    },
+    'It should return a shallow copy of the existing array, if valueN is undefined.': function () {
+      var array = [undefined]
+      var array1 = [4, 5]
+      var newArray = concat(array, array1)
+      eq(newArray[0], undefined)
+      eq(newArray[1], array1[0])
+      eq(newArray[2], array1[1])
+    },
+    'It should include elements of array arguments that are also arrays.': function () {
+      var arry1 = [1, 2]
+      var arry2 = [3, 4]
+      var arry3 = [5, 6]
+      var newArray = concat(arry1, arry2, arry3)
+      eq(newArray[0], arry1[0])
+      eq(newArray[2], arry2[0])
+    },
+    'The original array will be left untouched.': function () {
+      var arry1 = [1, 2]
+      var arry2 = [3, 4]
+      var newArray = concat(arry1, arry2)
+      eq(newArray === arry1, false)
+      eq(arry1[0], 1)
+    }
+  })
+
+</script>

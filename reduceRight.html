@@ -150,6 +150,7 @@
       eq(reduceRightArray, 10)
     },
     'If initialValue, it should exclude holes.': function () {
+      debugger;
       var initialValue = 0;
       var array = [, , , , 1, 2, , , , , , 3, 4];
       var sum = reduceRight(array, function (accumulator, currentValue) {
