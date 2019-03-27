@@ -176,6 +176,13 @@
       var fromIndex = -2;
       var indexOfArray = indexOf(array, searchElement, fromIndex)
       eq(indexOfArray, 3);
+    },
+    'It should return the index of a string dataType too':function(){
+      var word = 'Christopher';
+      var searchElement = 'r';
+      var fromIndex = -2;
+      var indexOfArray = indexOf(word, searchElement, fromIndex)
+      eq(indexOfArray, 10);
     }
 
   })
