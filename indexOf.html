@@ -12,25 +12,171 @@
   // searchElement
   // fromIndex(optional)
 
-  // Description
-  // It should pass in array as first argument.
-  // It should pass in searchElement as second argument.
-  // It should pass in optional fromIndex argument.
-  // It should locate searchElement value within the array.
-  // It should have an optional fromIndex value.
-  // It should not search the array & return -1, if fromIndex is greater than array.length.
-  // It should not search the array & return -1, if fromIndex is equal to array.length. 
-  // If the provided index value is a negative number, it is taken as the offset from the end of the array.
-  // If the provided index is negative, the array is still searched from front to back.
-  // If the provided index is 0, then the whole array will be searched. 
-
-  // Return Value
+  // Return Values
   // The first index of the element in the array; -1 if not found.
 
-  // Description
-  // indexOf() compares searchElement to elements of the Array using strict equality(===)
+  function indexOf(array, searchElement, fromIndex) {
+    var startingIndex = 0;
+    var numberOfArguments = arguments.length; // assign arguments.length to numberOfArguments
+    var length = array.length; // assign array.length to length
+    var absoluteValueOfFromIndex = Math.abs(fromIndex);
+
+    // Check to see if fromIndex is true && in array.
+    if (numberOfArguments === 3 && fromIndex < length) {
+      startingIndex = absoluteValueOfFromIndex;
+
+      // Check to see if fromIndex is greater than or equal to array  
+    } if (numberOfArguments === 3 && fromIndex >= length) {
+      return -1;
+    }
+
+    // Check to see if fromIndex is a negative number.
+    if (numberOfArguments === 3 && fromIndex < 0) {
+
+
+      // Check to see if |fromIndex| is within the length of the array.
+      if (absoluteValueOfFromIndex > length) {
+        fromIndex = 0;
+        startingIndex = Math.abs(fromIndex);
+
+        // Check to see if |fromIndex| is larger than the length of the array.  
+      } else if (absoluteValueOfFromIndex <= length) {
+        fromIndex = Math.abs(fromIndex);
+        fromIndex = length - startingIndex;
+        startingIndex = fromIndex;
+      }
+
+
+      for (var i = startingIndex; i < length; i++) {
+
+        if (array[fromIndex] === searchElement && array[fromIndex] === array[i]) {
+          return i;
+        } if (array[fromIndex] <= searchElement && array[i] === searchElement) {
+          return i;
+        } if (array[fromIndex] === undefined && array[i] === array[searchElement]) {
+          fromIndex === 0;
+        }
+
+      }
+
+    }
+    // fromIndex is positive, iterate through array check for searchElement.
+    if (arguments[0] === array && Array.isArray(array)) {
+      for (var i = startingIndex; i < length; i++) {
+        if (array[i] === searchElement) {
+          return i;
+        }
+      }
+      return -1;
+    }
+  }
 
   tests({
+    'It should pass in array as first argument.': function () {
+      var array = [1];
+      var indexOfArray = indexOf(array)
+      eq(Array.isArray(array), true)
+    },
+    'It should pass in searchElement as second argument.': function () {
+      var array = [1, 2];
+      var searchElement = 1;
+      var indexOfArray = indexOf(array, searchElement)
+      eq(indexOfArray, 0)
+    },
+    'It should pass in optional fromIndex as third argument.': function () { // Not 100% confidence in this test
+      var fromIndex = 1;
+      var indexOfArray = indexOf([1, 2], 2, fromIndex)
+      eq(fromIndex, 1)
+    },
+    'It should locate searchElement value within the array.': function () {
+      var array = [1, 2];
+      var searchElement = 2;
+      var fromIndex = 0;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, 1);
+      eq(indexOfArray, array[fromIndex]);
+      eq(searchElement, array[1]);
+    },
+    'It should compare searchElement to elements of the Array using strict equality(===).': function () {
+      var array = [1, 2];
+      var searchElement = 2;
+      var fromIndex = 0;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(searchElement !== array[fromIndex], true);
+      eq(searchElement === array[1], true);
+    },
+    'If index value === searchElement && fromIndex value < array.length, it should return the index of the searchElement.': function () {
+      var array = [1, 2];
+      var searchElement = 2;
+      var fromIndex = 0;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, 1);
+      eq(array[1], searchElement);
+      eq(fromIndex < array.length, true);
+    },
+    'If optional fromIndex is greater than searchElement index, return -1.': function () {
+      var array = [1, 2];
+      var searchElement = 1;
+      var fromIndex = 1;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, -1);
+    },
+    'If optional formIndex is equal to array.length, return -1.': function () {
+      var array = [1, 2];
+      var searchElement = 1;
+      var fromIndex = 2;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, -1);
+    },
+    'If optional formIndex is greater than array.length, return -1.': function () {
+      var array = [1, 2];
+      var searchElement = 1;
+      var fromIndex = 3;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, -1);
+    },
+    'If optional formIndex is a negative number, it is taken as the offset from the end of the array.': function () {
+      var array = [1, 2, 3, 4, 5];
+      var searchElement = 5;
+      var fromIndex = -1;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, 4);
+    },
+    'If optional formIndex is a negative number, thats not in the array function should return index of searchElement.': function () {
+      var array = [1, 2, 3, 4, 5];
+      var searchElement = 3;
+      var fromIndex = -7;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, 2);
+    },
+    'If optional formIndex is a negative number, ': function () {
+      var array = [5, 5];
+      var searchElement = 5;
+      var fromIndex = -7;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, 0);
+    },
+    'If fromIndex is 0, then the whole array will be searched. ': function () {
+      var array = [2, 5];
+      var searchElement = 5;
+      var fromIndex = 0;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, 1);
+    },
+    'It should return -1, if negative formIndex is not the searchElement.': function () {
+      var array = [2, 3, 8];
+      var searchElement = 3;
+      var fromIndex = -1;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, -1);
+    },
+    'It should return i of the closest larger seachElement, when negative formIndex is less than searchElement i': function () {
+      var array = [2, 3, 8, 3];
+      var searchElement = 3;
+      var fromIndex = -2;
+      var indexOfArray = indexOf(array, searchElement, fromIndex)
+      eq(indexOfArray, 3);
+    }
 
   })
 
