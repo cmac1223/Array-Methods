@@ -1,0 +1,86 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  function lastIndexOf(string, searchValue, fromIndex) {
+    var startingIndex = string.length - 1;
+
+    // Check to see if the value of fromIndex is within the string.
+    if (fromIndex > -1 && fromIndex < string.length) {
+      startingIndex = fromIndex;
+    }
+
+    // Check to see if the value of fromIndex is greater than string.length.
+    if (fromIndex >= string.length) {
+      startingIndex = string.length - 1;
+    }
+
+    // Check to see if the value of fromIndex is less than index at 0.
+    if (fromIndex < 0) {
+      startingIndex = 0
+    }
+
+    // Check to see if the value of fromIndex is equal to index 0.
+    if (fromIndex === 0) {
+      startingIndex = 0
+    }
+
+    for (var i = startingIndex; i > -1; i--) {
+      // if (searchValue[0] === string[i + 0] && searchValue[1] === string[i + 1])
+      if (searchValue[0] === string[i] || searchValue === string[i])
+        return i;
+    }
+    return -1;
+  }
+
+  tests({
+    'It should return the index.': function () {
+      var str = 'Chris jogged';
+      var results = lastIndexOf(str, 'jogged')
+      eq(results, 6)
+    },
+    'It should return the index of the last occurrence of the value': function () {
+      // debugger;
+      var str = 'Chris jogged';
+      var results = lastIndexOf(str, 'g')
+      eq(results, 9)
+    },
+    'It should return -1, if the value is not found.': function () {
+      var str = 'Chris jogged';
+      var results = lastIndexOf(str, 'v')
+      eq(results, -1)
+    },
+    'It should return the index of the last character in the string to be considered as the beginning of a match.': function () {
+      var str = 'Chris jogged to the store';
+      var results = lastIndexOf(str, 'e')
+      eq(results, 24)
+    },
+    'If fromIndex >= str.length, the whole string is searched.': function () {
+      var str = 'Chris jogged to the store';
+      var results = lastIndexOf(str, 'C', 26)
+      eq(results, 0)
+    },
+    'If fromIndex is within the length of string then fromIndex will be the startingIndex': function () {
+      var str = 'Chris jogged to the store';
+      var results = lastIndexOf(str, 'C', 9)
+      eq(results, 0)
+    },
+    'If fromIndex === 0 than startingIndex === 0': function () {
+      var str = 'Chris jogged to the store';
+      var results = lastIndexOf(str, 'h', 0)
+      eq(results, -1)
+    },
+    'If fromIndex < 0, the behavior will be the same as if it would be 0.': function () {
+      var str = 'Chris jogged to the store';
+      var results = lastIndexOf(str, 'C', -11)
+      eq(results, 0)
+    },
+    'If index is not found, -1 is returned.': function () {
+      var str = 'Chris jogged to the store';
+      var results = lastIndexOf(str, 'w', 0)
+      eq(results, -1)
+    }
+
+  })
+
+</script>
