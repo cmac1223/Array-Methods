@@ -1,0 +1,89 @@
+<script src="../simpleTest.js"></script>
+<script>
+
+  // The includes() method determines whether one string may be found within another string, returning
+  // true or false as appropriate.
+
+  // native syntax
+  // str.includes(searchString[, position])
+
+  // our syntax
+  // includes(str, searchString[, position])
+
+  // Parameters:
+  // searchString(A string to be searched for within this string)
+  // position (optional) The position with the string at which to begin searching for searchString.
+
+  // Return value
+
+  function includes(str, searchString, position) {
+    var startingIndex = 0;
+
+    // If position is within the str length
+    if (position) {
+      startingIndex = position;
+    }
+
+    // If position is a negative number
+    if (position < 0) {
+      startingIndex = 0
+    }
+
+    // If position is greater than length of str
+    if (position > str.length) {
+
+    }
+
+    
+    for (var i = startingIndex; i < str.length; i++) {
+      // If the starting index of searchString and the ending searchString index matches the starting and ending index of str
+      if (searchString === str[i] || searchString[0] === str[i + 0] && searchString[searchString.length - 1] === str[i + searchString.length - 1]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  tests({
+    'It should determine whether one string may be found within another string.': function () {
+      var counter = 0;
+      var str = 'The quick brown fox jumps over the lazy dog.'
+      var includedString = includes(str, 'fox')
+      if (includedString === true) {
+        counter++;
+      }
+      eq(counter, 1)
+    },
+    'It should return true if string is found within another string.': function () {
+      var str = 'The quick brown fox jumps over the lazy dog.'
+      var includedString = includes(str, 'fox')
+      eq(includedString, true)
+    },
+    'It should return false if string is not found within another string.': function () {
+      var str = 'The quick brown fox jumps over the lazy dog.'
+      var includedString = includes(str, 'fox')
+      eq(includedString, true)
+    },
+    'It should return false if string found case does not match with original searchString.': function () {
+      var str = 'The quick brown fox jumps over the lazy dog.'
+      var includedString = includes(str, 'foxes')
+      eq(includedString, false)
+    },
+    'It should return false if position > searchString.': function () {
+      var str = 'The quick brown fox jumps over the lazy dog.'
+      var includedString = includes(str, 'fox', 17)
+      eq(includedString, false)
+    },
+    'It should return true if position < searchString.': function () {
+      var str = 'The quick brown fox jumps over the lazy dog.'
+      var includedString = includes(str, 'fox', 15)
+      eq(includedString, true)
+    },
+    'It should treat position < 0 as position === 0.': function () {
+      debugger;
+      var str = 'The quick brown fox jumps over the lazy dog.'
+      var includedString = includes(str, 'The', -15)
+      eq(includedString, true)
+    },
+  })
+</script>

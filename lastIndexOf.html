@@ -26,21 +26,22 @@
     }
 
     for (var i = startingIndex; i > -1; i--) {
-      // if (searchValue[0] === string[i + 0] && searchValue[1] === string[i + 1])
-      if (searchValue[0] === string[i] || searchValue === string[i])
+      if (searchValue[0] === string[i] && searchValue[searchValue.length-1] === string[i + searchValue.length-1] || searchValue === string[i]) {
+
         return i;
+      }
     }
     return -1;
   }
 
   tests({
     'It should return the index.': function () {
-      var str = 'Chris jogged';
+      debugger;
+      var str = 'Chris jogged jrdan';
       var results = lastIndexOf(str, 'jogged')
       eq(results, 6)
     },
     'It should return the index of the last occurrence of the value': function () {
-      // debugger;
       var str = 'Chris jogged';
       var results = lastIndexOf(str, 'g')
       eq(results, 9)

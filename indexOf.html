@@ -15,10 +15,10 @@
   // Return Values
   // The first index of the element in the array; -1 if not found.
 
-  function indexOf(value, searchElement, fromIndex) {
+  function indexOf(stringValue, searchElement, fromIndex) {
     var startingIndex = 0;
     var numberOfArguments = arguments.length; // assign arguments.length to numberOfArguments
-    var length = value.length; // assign array.length to length
+    var length = stringValue.length; // assign array.length to length
     var absoluteValueOfFromIndex = Math.abs(fromIndex);
 
     // Check to see if fromIndex is true && in array.
@@ -45,35 +45,36 @@
         fromIndex = length - startingIndex;
         startingIndex = fromIndex;
       }
+    }
 
-
+    // fromIndex is positive, iterate through array check for searchElement.
+    if (arguments[0] === stringValue && Array.isArray(stringValue) || typeof arguments[0] === "string") {
+      // loop through the string
       for (var i = startingIndex; i < length; i++) {
+        // Check to see if searchElement is within the stringValue
+        if (searchElement === stringValue[i] || searchElement[0] === stringValue[i + 0] && searchElement[searchElement.length - 1] === stringValue[i + searchElement.length - 1]) {
+          return i;
+        }
 
-        if (value[fromIndex] === searchElement && value[fromIndex] === value[i]) {
+        // Check to see if searchElement is within the stringValue starting at fromIndex return i
+        if (stringValue[fromIndex] === searchElement && stringValue[fromIndex] === stringValue[i]) {
           return i;
-        } if (value[fromIndex] <= searchElement && value[i] === searchElement) {
+        }
+
+        // Check to see if stringValue at fromIndex less than or equal to searchElement is true return i
+        if (stringValue[fromIndex] <= searchElement && stringValue[i] === searchElement) {
           return i;
-        } if (value[fromIndex] === undefined && value[i] === value[searchElement]) {
+        }
+
+        if (stringValue[fromIndex] === undefined /*&& stringValue[i] === stringValue[searchElement]*/) {
           fromIndex === 0;
         }
 
       }
-
     }
-    // fromIndex is positive, iterate through array check for searchElement.
-    if (arguments[0] === value && Array.isArray(value) || typeof arguments[0] === "string") {
-      for (var i = startingIndex; i < length; i++) {
-        // if (i in value) {
-          if (searchElement === value[i] || searchElement[0] === value[i + 0] && searchElement[1] === value[i + 1] /* value.match(searchElement) && value === searchElement*/) {
-            return i;
-            // return index;
-          }
-
-        // }
-      }
-      return -1;
-    }
+    return -1;
   }
+
 
   tests({
     'It should pass in searchElement as second argument.': function () {
@@ -184,14 +185,19 @@
       eq(indexOfArray, 10);
     },
     'It should return the index of a string dataType too': function () {
-      // debugger;
       var str = 'Hi my name is Christopher';
       var searchElement = 'is';
-      // var fromIndex = ;
       var indexOfArray = indexOf(str, searchElement)
       eq(indexOfArray, 11);
+    },
+    'It should return the index of a string dataType too': function () {
+      debugger;
+      var word = 'Christopher';
+      var searchElement = 'r';
+      var fromIndex = undefined;
+      var indexOfArray = indexOf(word, searchElement, fromIndex)
+      eq(indexOfArray, 2);
     }
-
   })
 
 </script>
