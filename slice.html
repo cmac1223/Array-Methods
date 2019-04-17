@@ -1,0 +1,178 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  // The slice method returns a shallow copy of a portion of an array into a new array object selected
+  // from begin to end (end not included). The original array will not be modified.
+
+  // native syntax
+  // arr.slice([begin[, end]])
+
+  // our syntax
+  // slice(arr[begin[, end]])
+
+  // Parameters:
+  // begin(optional)
+  // Zero-based index at which to begin extraction.
+  // A negative index can be used, indecating an offset from the end of the sequence.
+  // slice(-2) extracts the last two elements in the sequence.
+  // If begin is undefined, slice begins from index 0.
+  // If begin is greater than the length of the sequence, an empty array is returned.
+
+  // end(optional)
+  // Zero-based index before which to end extraction. slice extracts up to but not including end.
+  // A negative index can be used, indicating an offset from the end of the  sequence.
+  // slice(2, -1) extracts the third element through the second-to-last element in the sequence.
+  // if end is omitted, slice extracts through the end  of the sequence(arr.length).
+  // if end is greater than the length of the sequence, slice extracts through to the end of the sequence(arr.length).
+
+  // Return value
+  // A new array containing the extracted elements
+
+  function slice(array, begin, end) {
+    var startingIndex = 0;
+    var newArray = [];
+
+    // Check to see if begin is true
+    if (begin) {
+      startingIndex = begin;
+    }
+
+    // Check to see if absolute value of begin is greater than arr.lengthl
+    if (begin === undefined) {
+      begin = 0;
+    }
+
+    // Check to see if the value of begin is greater than array.length.
+    if (begin > array.length) {
+      return newArray;
+    }
+
+    // Check to see if begin is negative.
+    if (begin < 0 && Math.abs(begin) <= array.length) {
+      begin = Math.abs(begin) - length;
+      begin = array.length - begin;
+      begin = array[begin];
+    }
+
+    // Check to see if the absolute value of negative begin is greater than array.length
+    if (Math.abs(begin) > array.length) {
+      begin = array[0];
+      startingIndex = 0;
+    }
+
+    // Check to see if end is negative.
+    if (end < 0) {
+      end = Math.abs(end) - length;
+      var end = array.length - end
+    }
+
+    // Check to see rather or not end is greater than array.length.
+    if (end > array.length) {
+      arguments[0] = array;
+      arguments[1] = begin;
+      arguments.length = 2;
+    }
+
+    for (var i = startingIndex; i < array.length; i++) {
+      // begin paramter show be the start of the new Array.
+      if (arguments.length === 3 && array[i] >= begin && array[i] < array[end]) {
+        newArray.push(array[i]);
+      }
+      if (arguments.length === 2 && array[i] >= begin) {
+        newArray.push(array[i]);
+      }
+    }
+    return newArray;
+  }
+
+
+  tests({
+    'It should copy elements into the new array.': function () {
+      var array = [1, 2];
+      var newArray = slice(array)
+      eq(array[0], 1);
+      eq(array[1], 2);
+    },
+    'It should copy from the original array elements starting from the begin parameter.': function () {
+      var array = [1, 2, 3, 4];
+      var begin = array[1];
+      var newArray = slice(array, begin)
+      eq(array[1], 2);
+    },
+    'It should copy from the original array elements starting from the begin parameter and exclude end paratmer.': function () {
+      var array = [1, 2, 3, 4];
+      var begin = 1;
+      var end = 3;
+      var newArray = slice(array, begin, end)
+      eq(newArray[0], 2);
+      eq(newArray[newArray.length - 1], 3);
+    },
+    'It should offset the array if begin is a negative number whose absolute value is between 1 and arr.length.': function () {
+      var array = [1, 2, 3, 4];
+      var begin = -1;
+      var newArray = slice(array, begin)
+      eq(4, newArray[0]);
+    },
+    'It should copy the whole array if begin is a negative number whose asbolute value is greater than arr.length.': function () {
+      var array = [1, 2, 3, 4];
+      var begin = -55;
+      var newArray = slice(array, begin)
+      eq(1, newArray[0]);
+    },
+    'It should start at index 0 if begin is undefined.': function () {
+      var array = [1, 2, 3, 4];
+      var begin = undefined;
+      var newArray = slice(array, begin)
+      eq(1, newArray[0]);
+    },
+    'It should return an empty array if begin is greater than the length of the array.': function () {
+      var array = [1, 2, 3, 4];
+      var begin = 6;
+      var newArray = slice(array, begin)
+      eq(Array.isArray(newArray), true);
+      eq(newArray.length, 0);
+    },
+    'It should take in end(parameter) as a zero-based index which slice extracts up to but not include end(parameter).': function () {
+      var array = [1, 2, 3, 4];
+      var begin = 1;
+      var end = -1;
+      var newArray = slice(array, begin, end)
+      eq(newArray[0], 2)
+      eq(newArray[newArray.length - 1], 3)
+    },
+    'A negative index can be used for end, indicating an offset from the end of array.': function () {
+      var array = [1, 2, 3, 4, 5];
+      var begin = 1;
+      var end = -2;
+      var newArray = slice(array, begin, end)
+      eq(newArray[0], 2)
+      eq(newArray[newArray.length - 1], 3)
+    },
+    'It should return an empty array if negative end overlaps begin.': function () {
+      var array = [1, 2, 3, 4, 5];
+      var begin = 2;
+      var end = -3;
+      var newArray = slice(array, begin, end)
+      eq(Array.isArray(newArray), true);
+      eq(newArray.length, 0);
+    },
+    'If end is omitted, slice extracts through the end of the array.': function () {
+      var array = [1, 2, 3, 4];
+      var begin = 1;
+      var newArray = slice(array, begin)
+      eq(4, newArray[newArray.length - 1]);
+    },
+    'If end is greater than the length of the array, slice extracts through to the end of the array.': function () {
+      debugger;
+      var array = [1, 2, 3, 4, 5];
+      var begin = 0;
+      var end = 7;
+      var newArray = slice(array, begin)
+      eq(Array.isArray(newArray), true);
+      eq(newArray[newArray.length - 1], 5);
+    }
+
+  })
+
+</script>
