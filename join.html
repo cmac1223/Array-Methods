@@ -11,33 +11,88 @@
   // Parameters
   // separator(optional)
 
+  function join(array, selector) {
+    var joinArray = [];
+    for (var i = 0; i < array.length; i++) {
 
+      joinArray.push(array[i]);
+
+    }
+    if (selector || selector === '' || selector === false || selector === true) {
+
+      var blah = joinArray + '';
+      var regex = /,/gi;
+
+      var stringJoinWithSelector = blah.replace(regex, selector);
+      return stringJoinWithSelector;
+    } else {
+      var stringJoinWithNoSelector = joinArray + '';
+      return stringJoinWithNoSelector;
+    }
+
+  }
 
   tests({
     'It should creates and returns a new string by concatenating all of the elements in an array.': function () {
-      fail();
-     },
+      var array = [1, 2, 3];
+      var selector = '-'
+      var joinArray = join(array, selector)
+      eq(joinArray[0], array[0]);
+      eq(joinArray[1], '-');
+    },
+    'It should return string with commas if no selector was provided.': function () {
+      var array = [1, 2, 3];
+      var joinArray = join(array)
+      eq(joinArray[0], array[0]);
+      eq(joinArray[1], ',');
+    },
     'It should separate string by commas or a specified separator string.': function () {
-      fail();
-     },
+      var array = [1, 2, 3];
+      var selector = '*'
+      var joinArray = join(array, selector)
+      eq(joinArray[0], array[0]);
+      eq(joinArray[1], '*');
+    },
     'If array has only one item, then that item will be returned without using separator.': function () {
-      fail();
-     },
-    'It should return string with commas if no separator is provided.': function () {
-      fail();
-     },
+      var array = [1];
+      var selector = '*'
+      var joinArray = join(array, selector)
+      eq(joinArray[0], array[0]);
+    },
     'It should return condense string if separator is empty string with no spacing.': function () {
-      fail();
-     },
+      var array = [1, 2, 3];
+      var selector = ''
+      var joinArray = join(array, selector)
+      eq(joinArray[0], array[0]);
+      eq(joinArray[1], array[1]);
+      eq(joinArray[2], array[2]);
+    },
     'It should return condense string with number as separator if number value was used as separator.': function () {
-      fail();
-     },
+      // debugger;
+      var array = [1, 2, 3];
+      var selector = 8;
+      var joinArray = join(array, selector)
+      eq(joinArray[0], array[0]);
+      eq(joinArray[1], selector);
+      eq(joinArray[2], array[1]);
+    },
     'It should return string separated by commas if separator is undefined.': function () {
-      fail();
-     },
+      var array = [1, 2, 3];
+      var selector = undefined;
+      var joinArray = join(array, selector)
+      eq(joinArray[0], array[0]);
+      eq(joinArray[1], ',');
+      eq(joinArray[2], array[1]);
+    },
     'It should be able to use booleans as separator.': function () {
-      fail();
-     }
+      debugger;
+      var array = [1, 2, 3];
+      var selector = false;
+      var joinArray = join(array, selector)
+      eq(joinArray[0], array[0]);
+      eq(joinArray[1], 'f');
+      eq(joinArray[5], 'e');
+    }
 
   })
 
