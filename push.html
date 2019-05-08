@@ -1,0 +1,80 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  // native syntax
+  // arr.push(element1[,...[, elementN]])
+
+  //our syntax
+  // push(arr, element1[,...[, elementN]])
+
+  // Paramters
+  // elementN (The elements to add to the end of the array).
+
+  // Return value
+  // The new length property of the object upon which the method was called.
+
+  function push(arr, elementN) {
+    if (Array.isArray(arguments[0]) && arguments[0].length >= 0){
+
+      for (var i = 0; i <= arr.length; i++) {
+        if (arguments.length >= 2 && arguments[i + 1]) {
+          arr[arr.length - 1 + 1] = arguments[i + 1];
+        }
+      }
+    } else{
+      throw new TypeError('string.push is not a function');
+    }
+    return arr.length;
+  }
+
+  tests({
+
+    'It should appends value to an array.': function () {
+      // debugger;
+      var arr = [1];
+      var element1 = 2;
+      var elementN = 3;
+      var pushArray = push(arr, element1, elementN)
+      eq(pushArray, 3)
+
+    },
+    'It can be used with call() on objects resembling arrays.': function () {
+      var obj = {
+        length: 0,
+
+
+        addElem: function addElem(elem) {
+          [].push.call(this, elem);
+        }
+      }
+      obj.addElem({})
+      obj.addElem({})
+      eq(obj.length, 2)
+    },
+    'It can be used with apply() on objects resembling arrays.': function () {
+      var vegetables = ['parsnip', 'potato'];
+      var moreVegs = ['celery', 'beetroot'];
+      Array.prototype.push.apply(vegetables, moreVegs);
+      eq(vegetables.length, 4)
+    },
+    'It should use index 0, if the length property is nonexistent.': function () {
+      debugger;
+      var arr = [];
+      var element1 = 2;
+      var elementN = 3;
+      var pushArray = push(arr, element1, elementN)
+      eq(pushArray, 2)
+    },
+    'It should return TypeError if string is use instead of array.': function () {
+      var isTypeError = false;
+      try {
+        [].reduce(function () { });
+      } catch (e) {
+        var isTypeError = (e instanceof TypeError);
+      }
+      eq(isTypeError, true)
+    }
+  })
+
+</script>

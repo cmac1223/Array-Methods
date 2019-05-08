@@ -1,0 +1,55 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  function pops(array) {
+    // var array = array;
+    var poppedElement = array[array.length - 1];
+    if (Array.isArray(array) && array.length >= 1) {
+      array.length = array.length - 1;
+
+    } else {
+      return undefined
+    }
+    return poppedElement;
+
+  };
+
+  tests({
+    'It should remove the last element from an array.': function () {
+      var arr = ['one', 'two', 'three'];
+      var elementRemove = pops(arr);
+      eq(2, arr.length);
+      eq('two', arr[arr.length - 1]);
+    },
+    'It should change the length of the original array.': function () {
+      array = ['one', 'two'];
+      pops(array);
+      eq(1, array.length);
+    },
+    'It should return that value to the caller.': function () {
+      var array = [1, 2];
+      var lastElementReturn = pops(array);
+      eq(2, lastElementReturn)
+    },
+    'It should return undefined, if call on empty array.': function () {
+      var array = [];
+      var poppedResults = pops(array);
+      eq(undefined, poppedResults)
+    },
+    'It should remove the last element from an array regardless of parameter.': function () {
+      var array = [1, 2];
+      var lastElementReturn = pops(array, 'blah');
+      eq(2, lastElementReturn)
+    },
+    'It should be able to treat holds as placeholders.': function () {
+      var array = [1, 2, ,];
+      var lastElementReturn = pops(array);
+      eq(undefined, lastElementReturn);
+      eq(2, array.length);
+    }
+
+
+  })
+
+</script>
