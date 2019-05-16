@@ -1,0 +1,75 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  function unshift(array, elementN) {
+    if (array instanceof String === true){
+      throw new TypeError('string.myPop is not a function');
+    }
+    // number of indexes that will increase
+    var numberOfTimesIndexShift = arguments.length - 1;
+
+    // check to see if there is an additional element besides array
+    if (arguments.length > 1) {
+
+      
+      // iterate through array starting from end of array.
+      for (var i = array.length - 1; i >= 0; i--) {
+        
+        // reassign element according to number
+        array[i + numberOfTimesIndexShift] = array[i]
+
+      }
+      for(var i = 0; i < array.length; i++){
+        // check to see if index is less than numberOfTimesIndexShift
+        if (i >= 0 && i < numberOfTimesIndexShift) {
+  
+          // assign argument to the corresponding index 
+          array[i] = arguments[i + 1]
+        }
+
+      }
+
+    }
+
+    return array.length;
+  }
+
+
+  tests({
+    'It should inserts the given values to the beginning of an array-like object.': function () {
+      var array = [1, 2, 3]
+      var unshiftedArray = unshift(array, 4)
+      eq(4, unshiftedArray)
+    },
+    'It should increase the quantity of index.': function () {
+      var array = [1, 2, 3]
+      var unshiftedArray = unshift(array, 4)
+      eq(4, array.length)
+    },
+    'If more than one element is passed into the parameter it will insert in the beginning of the array in that order.': function () {
+      debugger;
+      var array = [1, 2, 3]
+      var unshiftedArray = unshift(array, 4, 3, 5/*, 'blah' */)
+      eq(6, array.length)
+    },
+    'It should return array.length.': function () {
+      var array = [1, 2, 3]
+      var unshiftedArray = unshift(array, 4)
+      eq(4, array.length)
+    },
+    // 'It should return TypeError if string is use instead of array.': function () {
+      'If parameter data type = String, throw TypeError.': function () {
+      var isTypeError = false;
+      try {
+        String.myPop(function () { });
+      } catch (e) {
+        var isTypeError = (e instanceof TypeError);
+      }
+      eq(isTypeError, true)
+    }
+    
+
+  })
+
+</script>

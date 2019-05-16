@@ -2,11 +2,20 @@
 
 <script>
 
-  function pops(array) {
-    // var array = array;
+  function myPop(array) {
+    
+    if (array instanceof String === true){
+      throw new TypeError('string.myPop is not a function');
+    }
+
     var poppedElement = array[array.length - 1];
-    if (Array.isArray(array) && array.length >= 1) {
+    if (Array.isArray(array) && array.length >= 1 || array instanceof Object && Object.keys(array).length >= 1) {
+
+      // manipulate the array
       array.length = array.length - 1;
+
+      // use splice method
+      // array.splice(array.length - 1)
 
     } else {
       return undefined
@@ -18,38 +27,56 @@
   tests({
     'It should remove the last element from an array.': function () {
       var arr = ['one', 'two', 'three'];
-      var elementRemove = pops(arr);
+      var elementRemove = myPop(arr);
       eq(2, arr.length);
       eq('two', arr[arr.length - 1]);
     },
     'It should change the length of the original array.': function () {
       array = ['one', 'two'];
-      pops(array);
+      myPop(array);
       eq(1, array.length);
     },
     'It should return that value to the caller.': function () {
       var array = [1, 2];
-      var lastElementReturn = pops(array);
+      var lastElementReturn = myPop(array);
       eq(2, lastElementReturn)
     },
+    // 'It should be called to objects resembling arrays.': function () {
+    //   debugger;
+    //   var myFish = { 0: 'angel', 1: 'clown', 2: 'mandarin', 3: 'sturgeon', length: 4 };
+
+    //   var popped = myPop(myFish).call(myFish);
+
+    //   eq(3, myFish.length)
+    // },
+    // 'It should be applied to objects resembling arrays.': function () {
+    //   fail();
+    // },
     'It should return undefined, if call on empty array.': function () {
       var array = [];
-      var poppedResults = pops(array);
+      var poppedResults = myPop(array);
       eq(undefined, poppedResults)
     },
     'It should remove the last element from an array regardless of parameter.': function () {
       var array = [1, 2];
-      var lastElementReturn = pops(array, 'blah');
+      var lastElementReturn = myPop(array, 'blah');
       eq(2, lastElementReturn)
     },
     'It should be able to treat holds as placeholders.': function () {
       var array = [1, 2, ,];
-      var lastElementReturn = pops(array);
+      var lastElementReturn = myPop(array);
       eq(undefined, lastElementReturn);
       eq(2, array.length);
+    },
+    'If parameter data type = String, throw TypeError.': function () {
+      var isTypeError = false;
+      try {
+        String.myPop(function () { });
+      } catch (e) {
+        var isTypeError = (e instanceof TypeError);
+      }
+      eq(isTypeError, true)
     }
-
-
   })
 
 </script>

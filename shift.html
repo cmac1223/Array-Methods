@@ -1,0 +1,72 @@
+<script src="../simpleTest.js"></script>
+
+<script>
+
+  function myShift(array) {
+
+    if (array instanceof String === true) {
+      throw new TypeError('string.myPop is not a function');
+    }
+
+    if (array.length >= 1) {
+
+      // Assign element at index 0 to var shiftedElement.
+      var shiftedElement = array[0];
+
+      // use splice method to remove element at index 0.
+      array.splice(0, 1)
+
+    } else {
+      return undefined;
+    }
+
+    // return removed element.
+    return shiftedElement;
+  }
+
+
+  tests({
+    'It should removes the element at the zeroeth index.': function () {
+      var array = [1, 2]
+      var myShiftedElement = myShift(array);
+      eq(2, array[0])
+    },
+    'It should shift the values at consecutive indexes down.': function () {
+      var array = [1, 2]
+      var myShiftedElement = myShift(array);
+      eq(2, array[0])
+    },
+    'It should returns that removed element.': function () {
+      var array = [1, 2]
+      var myShiftedElement = myShift(array);
+      eq(1, myShiftedElement)
+    },
+    'It should changes the length of the array.': function () {
+      var array = [1, 2]
+      var myShiftedElement = myShift(array);
+      eq(1, array.length)
+    },
+    'It should returned undefined if  the length property is 0.': function () {
+      debugger;
+      var array = []
+      var myShiftedElement = myShift(array);
+      eq(undefined, myShiftedElement)
+    },
+    'If parameter data type = String, throw TypeError.': function () {
+      var isTypeError = false;
+      try {
+        String.myPop(function () { });
+      } catch (e) {
+        var isTypeError = (e instanceof TypeError);
+      }
+      eq(isTypeError, true)
+    },
+    'It should behave as normal regardless if there is a parameter present or not.': function () {
+      var array = [1,2]
+      var myShiftedElement = myShift(array,'blah');
+      eq(1, myShiftedElement)
+    }
+
+  })
+
+</script>
